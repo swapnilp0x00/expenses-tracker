@@ -25,6 +25,7 @@ class _NewTransactionState extends State<NewTransaction> {
       title,
       amount,
     );
+    Navigator.of(context).pop();
     print(titleController.text);
   }
 
