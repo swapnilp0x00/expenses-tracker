@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.purple,
           accentColor: Colors.amber,
           fontFamily: 'Quicksand',
+          errorColor: Colors.red,
           textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
                 fontFamily: 'OpenSans',
@@ -49,18 +50,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<Transaction> _userTransaction = [
-    // Transaction(
-    //   id: 't1',
-    //   title: 'New Shoes',
-    //   amount: 170.00,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'New Watch',
-    //   amount: 1120.00,
-    //   date: DateTime.now(),
-    // )
+    Transaction(
+      id: 't1',
+      title: 'New Shoes',
+      amount: 170.00,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'New Watch',
+      amount: 1120.00,
+      date: DateTime.now(),
+    )
   ];
 
   List<Transaction> get _recentTransactions {
@@ -69,16 +70,24 @@ class _HomeState extends State<Home> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime date) {
     final newTx = Transaction(
       title: title,
       amount: amount,
-      date: DateTime.now(),
-      id: DateTime.now().toString(),
+      date: date,
+      id: date.toString(),
     );
 
     setState(() {
       _userTransaction.insert(0, newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((tx) {
+        return tx.id == id;
+      });
     });
   }
 
@@ -108,7 +117,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransaction),
+            TransactionList(_userTransaction, _deleteTransaction),
           ],
         ),
       ),
